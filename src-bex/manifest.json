@@ -1,38 +1,40 @@
 {
-  "manifest_version": 2,
+  "all": {
+    "manifest_version": 2,
 
-  "options_page": "www/index.html#/settings",
-  "browser_action": {
-    "default_popup": "www/index.html#/"
-  },
+    "options_page": "www/index.html#/settings",
+    "browser_action": {
+      "default_popup": "www/index.html#/"
+    },
 
-  "icons": {
-    "16": "icons/icon-16x16.png",
-    "48": "icons/icon-48x48.png",
-    "128": "icons/icon-128x128.png"
-  },
+    "icons": {
+      "16": "icons/icon-16x16.png",
+      "48": "icons/icon-48x48.png",
+      "128": "icons/icon-128x128.png"
+    },
 
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": true
-  },
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": true
+    },
 
-  "content_scripts": [
-    {
-      "matches": ["https://rutracker.org/forum/*"],
-      "js": ["my-content-script.js"],
-      "css": ["assets/content.css"]
-    }
-  ],
+    "content_scripts": [
+      {
+        "matches": ["https://rutracker.org/forum/*"],
+        "js": ["my-content-script.js"],
+        "css": ["assets/content.css"]
+      }
+    ],
 
-  "permissions": [
-    "https://rutracker.org/forum/*",
-    "storage",
-    "tabs",
-    "activeTab"
-  ],
+    "permissions": [
+      "https://rutracker.org/forum/*",
+      "storage",
+      "tabs",
+      "activeTab"
+    ],
 
-  "web_accessible_resources": ["*", "<all_urls>"],
+    "web_accessible_resources": ["*", "<all_urls>"],
 
-  "content_security_policy": "script-src 'self'; object-src 'self';"
+    "content_security_policy": "script-src 'self'; object-src 'self';"
+  }
 }
