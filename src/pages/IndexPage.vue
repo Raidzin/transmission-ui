@@ -151,12 +151,19 @@ async function sendFileToTransmission() {
   await Promise.all(promises);
 }
 
-$q.bex.on("torrent.setUrl", ({ data, respond }) => {
-  torrentFiles.value.push(data);
-  respond();
+$q.bex.on("foundURL", (message) => {
+  torrentFiles.value.push(message.payload);
 });
 
-onMounted(() => {
-  $q.bex.send("back.torrent.getUrl");
+onMounted(async () => {
+  const contentPort = $q.bex.portList.find((portName) =>
+    portName.startsWith("content@"),
+  );
+  if (contentPort) {
+    $q.bex.send({
+      event: "findURL",
+      to: contentPort,
+    });
+  }
 });
 </script>

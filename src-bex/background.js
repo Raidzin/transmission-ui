@@ -1,13 +1,3 @@
-import { bexBackground } from "quasar/wrappers";
+import { createBridge } from "#q-app/bex/background";
 
-export default bexBackground((bridge /* , allActiveConnections */) => {
-  bridge.on("back.torrent.getUrl", ({ data, respond }) => {
-    bridge.send("torrent.getUrl", data);
-    respond();
-  });
-
-  bridge.on("back.torrent.setUrl", ({ data, respond }) => {
-    bridge.send("torrent.setUrl", data);
-    respond();
-  });
-});
+const bridge = createBridge({ debug: false });
