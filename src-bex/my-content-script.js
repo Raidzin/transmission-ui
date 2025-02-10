@@ -5,13 +5,10 @@ const bridge = createBridge();
 const baseURL = "https://rutracker.org/forum";
 
 bridge.on("findURL", async (message) => {
-  console.log("finding Url...");
   const el = document.getElementsByClassName("dl-stub dl-link dl-topic");
   const attr = el[0].getAttribute("href", 2);
   let responseData;
-  await fetch(`${baseURL}/${attr}`, {
-    method: "GET",
-  })
+  await fetch(`${baseURL}/${attr}`, { method: "GET" })
     .then(async (response) => {
       const header = response.headers.get("Content-Disposition");
       const parts = header.split(";");
@@ -23,18 +20,9 @@ bridge.on("findURL", async (message) => {
     .then((data) => {
       responseData = data;
     });
-  bridge.send({
-    event: "foundURL",
-    to: "app",
-    payload: responseData,
-  });
+  bridge.send({ event: "foundURL", to: "app", payload: responseData });
 });
 
-bridge
-  .connectToBackground()
-  .then(() => {
-    console.log("Connected to background");
-  })
-  .catch((err) => {
-    console.error("Failed to connect to background:", err);
-  });
+bridge.connectToBackground().catch((err) => {
+  console.error("Failed to connect to background:", err);
+});

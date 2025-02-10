@@ -66,7 +66,7 @@ const $settings = useSettingsStore();
 const $q = useQuasar();
 const testLoading = ref(false);
 const downloadModeOptions = ref([
-  { label: "Без подпапок", value: "single" },
+  { label: "Без под-папок", value: "single" },
   { label: "Jellyfin", value: "jellyfin" },
   { label: "Jellyfin многопользовательский", value: "jellyfin-multiuser" },
 ]);
@@ -84,10 +84,7 @@ async function testTransmission() {
         if (response.data.result == "success") {
           $q.notify({ message: "Подключение успешно!", type: "positive" });
         } else {
-          $q.notify({
-            message: "Неизвестная ошибка!",
-            type: "negative",
-          });
+          $q.notify({ message: "Неизвестная ошибка!", type: "negative" });
         }
       });
   };
@@ -95,10 +92,7 @@ async function testTransmission() {
     .catch((err) => {
       console.error(err);
       if (err.code == "ECONNABORTED") {
-        $q.notify({
-          message: `Нет ответа от сервера`,
-          type: "negative",
-        });
+        $q.notify({ message: `Нет ответа от сервера`, type: "negative" });
         return;
       }
       if (!err.response) {
@@ -113,16 +107,10 @@ async function testTransmission() {
           });
           break;
         case 404:
-          $q.notify({
-            message: "Неверный API URL!",
-            type: "negative",
-          });
+          $q.notify({ message: "Неверный API URL!", type: "negative" });
           break;
         case _:
-          $q.notify({
-            message: "Неизвестная ошибка!",
-            type: "negative",
-          });
+          $q.notify({ message: "Неизвестная ошибка!", type: "negative" });
           break;
       }
     })

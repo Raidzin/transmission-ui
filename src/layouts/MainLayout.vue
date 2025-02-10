@@ -6,7 +6,24 @@
       </q-toolbar>
       <q-tabs align="left">
         <q-route-tab :to="{ name: 'index' }" icon="home" />
-        <q-route-tab :to="{ name: 'settings' }" icon="settings" />
+        <q-route-tab :to="{ name: 'settings' }" icon="settings">
+          <q-menu context-menu>
+            <q-list separator>
+              <q-item clickable v-ripple @click="exportConfig">
+                <q-item-section avatar>
+                  <q-icon color="primary" name="upload" />
+                </q-item-section>
+                <q-item-section>Экспорт</q-item-section>
+              </q-item>
+              <q-item clickable v-ripple @click="ImportConfig">
+                <q-item-section avatar>
+                  <q-icon color="primary" name="download" />
+                </q-item-section>
+                <q-item-section>Импорт</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-route-tab>
       </q-tabs>
     </q-header>
 
@@ -32,7 +49,7 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { api } from "src/boot/axios";
 import { useQuasar } from "quasar";
 import { useSettingsStore } from "src/stores/settings-store";
@@ -40,6 +57,30 @@ import { version } from "../../package.json";
 
 const $settings = useSettingsStore();
 const $q = useQuasar();
+
+function exportConfig() {
+  let blob = new Blob([$settings.dump()], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "transmission-ui-config.json";
+  link.click();
+}
+
+function ImportConfig() {
+  $q.dialog({
+    title: "Импорт настроек",
+    message: "Вставьте содержимое файла настроек",
+    prompt: {
+      model: "",
+      type: "textarea", // optional
+    },
+    cancel: true,
+    persistent: true,
+    seamless: true,
+  }).onOk((data) => {
+    $settings.restore(data);
+  });
+}
 
 onMounted(async () => {
   if ($settings.isAuth) {

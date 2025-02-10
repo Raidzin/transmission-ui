@@ -39,12 +39,6 @@
           v-model="showTitle"
           class="q-mr-sm"
         ></q-input>
-        <q-input
-          label="Сезон"
-          outlined
-          v-model.number="showSeason"
-          type="number"
-        ></q-input>
       </div>
     </div>
   </q-page>
@@ -83,7 +77,6 @@ const jellyfinContentTypes = ref([
 ]);
 const isShowSeason = ref(false);
 const showTitle = ref("");
-const showSeason = ref(1);
 
 function blobToBase64(blob) {
   return new Promise((resolve, _) => {
@@ -105,7 +98,7 @@ function createJellyfinDir(baseDir) {
   if (!isShowSeason.value) {
     return `${baseDir}/${jellyfinContentType.value}`;
   } else {
-    return `${baseDir}/${jellyfinContentType.value}/${showTitle.value}/season-${showSeason.value}`;
+    return `${baseDir}/${jellyfinContentType.value}/${showTitle.value}`;
   }
 }
 
@@ -128,14 +121,10 @@ async function sendFileToTransmission() {
     const rawBlobData = blobData.split(",")[1].trim();
     const sendRequest = {
       method: "torrent-add",
-      arguments: {
-        "download-dir": downloadDir,
-        metainfo: rawBlobData,
-      },
+      arguments: { "download-dir": downloadDir, metainfo: rawBlobData },
     };
     promises.push(
       api.post($settings.apiUrl, sendRequest).then((response) => {
-        console.log(response);
         if (response.data.result != "success") {
           $q.notify({
             message: `[Ошибка] ${response.data.result}`,
@@ -160,10 +149,7 @@ onMounted(async () => {
     portName.startsWith("content@"),
   );
   if (contentPort) {
-    $q.bex.send({
-      event: "findURL",
-      to: contentPort,
-    });
+    $q.bex.send({ event: "findURL", to: contentPort });
   }
 });
 </script>

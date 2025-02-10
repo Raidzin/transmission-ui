@@ -51,6 +51,27 @@ export const useSettingsStore = defineStore("settings", () => {
     LocalStorage.setItem(downloadUsernameKey, downloadUsername.value);
     api.defaults.auth = auth.value;
   }
+
+  function dump() {
+    return JSON.stringify({
+      auth: auth.value,
+      apiUrl: apiUrl.value,
+      downloadDir: downloadDir.value,
+      downloadMode: downloadMode.value,
+      downloadUsername: downloadUsername.value,
+    });
+  }
+
+  function restore(config) {
+    const configData = JSON.parse(config);
+    auth.value = configData.auth;
+    apiUrl.value = configData.apiUrl;
+    downloadDir.value = configData.downloadDir;
+    downloadMode.value = configData.downloadMode;
+    downloadUsername.value = configData.downloadUsername;
+    save();
+  }
+
   return {
     // store
     auth,
@@ -62,5 +83,7 @@ export const useSettingsStore = defineStore("settings", () => {
     isAuth,
     // funcs
     save,
+    dump,
+    restore,
   };
 });
