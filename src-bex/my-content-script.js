@@ -5,8 +5,10 @@ const bridge = createBridge();
 const baseURL = "https://rutracker.org/forum";
 
 bridge.on("findURL", async (message) => {
-  const el = document.getElementsByClassName("dl-stub dl-link dl-topic");
-  const attr = el[0].getAttribute("href", 2);
+  console.debug("finding urls");
+  const image = document.querySelector('img[alt="Скачать .torrent"]');
+  const tag = image.parentElement;
+  const attr = tag.getAttribute("href", 2);
   let responseData;
   await fetch(`${baseURL}/${attr}`, { method: "GET" })
     .then(async (response) => {
